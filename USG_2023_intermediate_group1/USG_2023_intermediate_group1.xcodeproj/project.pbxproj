@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		031A8ED129912B30009B6B31 /* PlaceholderStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031A8ED029912B30009B6B31 /* PlaceholderStyle.swift */; };
+		031A8ED329912B3D009B6B31 /* PlaceholderStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031A8ED229912B3D009B6B31 /* PlaceholderStyle.swift */; };
+		031A8ED929914F88009B6B31 /* detailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031A8ED829914F87009B6B31 /* detailView.swift */; };
 		033F015C299112EA005B8D15 /* USG_2023_intermediate_group1App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033F015B299112EA005B8D15 /* USG_2023_intermediate_group1App.swift */; };
 		033F015E299112EA005B8D15 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033F015D299112EA005B8D15 /* ContentView.swift */; };
 		033F0160299112EC005B8D15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 033F015F299112EC005B8D15 /* Assets.xcassets */; };
@@ -15,6 +18,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		031A8ED029912B30009B6B31 /* PlaceholderStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaceholderStyle.swift; path = USG_2023_intermediate_group1/PlaceholderStyle.swift; sourceTree = SOURCE_ROOT; };
+		031A8ED229912B3D009B6B31 /* PlaceholderStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceholderStyle.swift; sourceTree = "<group>"; };
+		031A8ED829914F87009B6B31 /* detailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = detailView.swift; sourceTree = "<group>"; };
 		03319B9129911DD600BBFBB7 /* USG-2023-intermediate-group1-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "USG-2023-intermediate-group1-Info.plist"; sourceTree = SOURCE_ROOT; };
 		033F0158299112EA005B8D15 /* USG_2023_intermediate_group1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = USG_2023_intermediate_group1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		033F015B299112EA005B8D15 /* USG_2023_intermediate_group1App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USG_2023_intermediate_group1App.swift; sourceTree = "<group>"; };
@@ -58,6 +64,8 @@
 				033F015B299112EA005B8D15 /* USG_2023_intermediate_group1App.swift */,
 				033F015D299112EA005B8D15 /* ContentView.swift */,
 				03E4A4C22991194A0032E3BD /* getMov.swift */,
+				031A8ED829914F87009B6B31 /* detailView.swift */,
+				031A8ED229912B3D009B6B31 /* PlaceholderStyle.swift */,
 				033F015F299112EC005B8D15 /* Assets.xcassets */,
 				033F0161299112EC005B8D15 /* Preview Content */,
 			);
@@ -67,6 +75,7 @@
 		033F0161299112EC005B8D15 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
+				031A8ED029912B30009B6B31 /* PlaceholderStyle.swift */,
 				033F0162299112EC005B8D15 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
@@ -142,7 +151,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				031A8ED329912B3D009B6B31 /* PlaceholderStyle.swift in Sources */,
+				031A8ED929914F88009B6B31 /* detailView.swift in Sources */,
 				03E4A4C32991194A0032E3BD /* getMov.swift in Sources */,
+				031A8ED129912B30009B6B31 /* PlaceholderStyle.swift in Sources */,
 				033F015E299112EA005B8D15 /* ContentView.swift in Sources */,
 				033F015C299112EA005B8D15 /* USG_2023_intermediate_group1App.swift in Sources */,
 			);
@@ -277,7 +289,6 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "USG-2023-intermediate-group1-Info.plist";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -307,7 +318,6 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "USG-2023-intermediate-group1-Info.plist";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
