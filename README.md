@@ -3,8 +3,8 @@
 ## 안병욱
 <img
   src="https://github.com/ProjectInTheClass/USG_2023_intermediate_group1/blob/main/image%20source/abw%20profile%20image.jpg?raw=true"
-  width="40"
-  height="30"
+  width="120"
+  height="90"
 />
 - 이름: 안병욱
 - 나이: 비공개
