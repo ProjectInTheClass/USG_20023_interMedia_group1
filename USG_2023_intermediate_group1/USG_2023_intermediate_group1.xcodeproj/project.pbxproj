@@ -15,6 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		03319B9129911DD600BBFBB7 /* USG-2023-intermediate-group1-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "USG-2023-intermediate-group1-Info.plist"; sourceTree = SOURCE_ROOT; };
 		033F0158299112EA005B8D15 /* USG_2023_intermediate_group1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = USG_2023_intermediate_group1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		033F015B299112EA005B8D15 /* USG_2023_intermediate_group1App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = USG_2023_intermediate_group1App.swift; sourceTree = "<group>"; };
 		033F015D299112EA005B8D15 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -53,6 +54,7 @@
 		033F015A299112EA005B8D15 /* USG_2023_intermediate_group1 */ = {
 			isa = PBXGroup;
 			children = (
+				03319B9129911DD600BBFBB7 /* USG-2023-intermediate-group1-Info.plist */,
 				033F015B299112EA005B8D15 /* USG_2023_intermediate_group1App.swift */,
 				033F015D299112EA005B8D15 /* ContentView.swift */,
 				03E4A4C22991194A0032E3BD /* getMov.swift */,
@@ -274,6 +276,7 @@
 				DEVELOPMENT_TEAM = CRJ3674QVG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "USG-2023-intermediate-group1-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -303,6 +306,7 @@
 				DEVELOPMENT_TEAM = CRJ3674QVG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "USG-2023-intermediate-group1-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
