@@ -11,6 +11,7 @@
 		033F015E299112EA005B8D15 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033F015D299112EA005B8D15 /* ContentView.swift */; };
 		033F0160299112EC005B8D15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 033F015F299112EC005B8D15 /* Assets.xcassets */; };
 		033F0163299112EC005B8D15 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 033F0162299112EC005B8D15 /* Preview Assets.xcassets */; };
+		03E4A4C32991194A0032E3BD /* getMov.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03E4A4C22991194A0032E3BD /* getMov.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +20,7 @@
 		033F015D299112EA005B8D15 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		033F015F299112EC005B8D15 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		033F0162299112EC005B8D15 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		03E4A4C22991194A0032E3BD /* getMov.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = getMov.swift; path = ../../../Usg01/Usg01/getMov.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +55,7 @@
 			children = (
 				033F015B299112EA005B8D15 /* USG_2023_intermediate_group1App.swift */,
 				033F015D299112EA005B8D15 /* ContentView.swift */,
+				03E4A4C22991194A0032E3BD /* getMov.swift */,
 				033F015F299112EC005B8D15 /* Assets.xcassets */,
 				033F0161299112EC005B8D15 /* Preview Content */,
 			);
@@ -137,6 +140,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03E4A4C32991194A0032E3BD /* getMov.swift in Sources */,
 				033F015E299112EA005B8D15 /* ContentView.swift in Sources */,
 				033F015C299112EA005B8D15 /* USG_2023_intermediate_group1App.swift in Sources */,
 			);
