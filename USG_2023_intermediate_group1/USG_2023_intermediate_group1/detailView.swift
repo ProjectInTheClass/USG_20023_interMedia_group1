@@ -15,7 +15,7 @@ struct detailView: View {
     
     @State var progress: Bool = true
     
-    init(_id: String = "631f9079842a834b759419d9"){
+    init(_id: String = "631f93832d06ff4e337e64b9"){
         self.MId = _id
     }
     
@@ -38,6 +38,7 @@ struct detailView: View {
                     self.MovieDetail = response
                     print(comments.count)
                     progress = false
+                    //print((response.year))
                 }
             }
             catch {
@@ -48,36 +49,49 @@ struct detailView: View {
     }
     var body: some View {
         if progress {
-            ProgressView()
+            ProgressView() // 로딩
                 .onAppear(){
                     getDetails()
                 }
         } else {
             GeometryReader { geometry in
                 ScrollView(){
-                    VStack{
-                        
-                            AsyncImage(url: URL(string: "http://mynf.codershigh.com:8080"+MovieDetail!.image)) {img in
-                                ZStack{
-                                
-                                img.image?.resizable()
-                                    .frame(width:geometry.size.width)
+                    // 영화 포스터
+                    VStack(){
+                        AsyncImage(url: URL(string: "http://mynf.codershigh.com:8080"+MovieDetail!.image)) {img in
+                            //let Images = img.image
+                            ZStack{
+                                img.image?
+                                    .resizable()
+                                    .frame(width:geometry.size.width, height: 300)
                                     .opacity(0.3)
-                                img.image
+                                img.image?
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(height: 300)
                                 
                             }
                         }
-                        Text("영화 정보")
-                        
-                        Text(MovieDetail!.title)
-                        Text("개봉 연도 \(MovieDetail!.year)년")
+                        // 영화 정보
                         HStack{
-                            Text("장르:")
-                            ForEach(MovieDetail!.genre, id: \.self){ genre in
-                                Text(genre+",")
+                            VStack(alignment: .leading){
+                                Text(MovieDetail!.title)
+                                    .font(.largeTitle)
+                                    .bold()
+                                    .padding(.bottom,10)
+                                Text("개봉: " + String(MovieDetail!.year) + " 년")
+                                HStack{
+                                    Text("장르: ")
+                                    ForEach(MovieDetail!.genre, id: \.self){ genre in
+                                        Text(genre+",")
+                                    }
+                                }
                             }
+                            .padding(.leading, 10)
+                            Spacer()
                         }
-                        ScrollView{
+                        //MARK: 배우 뷰
+                        ScrollView(.horizontal){
                             HStack{
                                 ForEach(actors, id: \._id) { actor in
                                     VStack{
@@ -88,27 +102,61 @@ struct detailView: View {
                                                 .clipShape(Circle())
                                         }
                                         Text(actor.name)
+                                            .lineLimit(2)
+                                            .onAppear(){
+                                                print(actor.name)
+                                            }
                                     }
+                                    .frame(width: 100,height: 160)
+                                    .padding()
+                                    .background(Rectangle().cornerRadius(15).foregroundColor(.secondary).opacity(0.5))
+                                    .padding(5)
                                 }
                             }
                         }
+                        // MARK: 뎃글 뷰
+                        Text("\n댓글")
+                            .font(.title)
                         ForEach(comments, id: \._id) { comment in
-                            VStack{
-                                HStack{
+                            VStack(alignment: .leading){
+                                HStack(){
                                     Text(comment.name)
+                                        .bold()
+                                        .font(.headline)
                                     Text(comment.userId)
+                                    Spacer()
+                                    Image(systemName: "star")
                                     Text(String(comment.rating))
                                 }
+                                .frame(height: 40)
+                                .background(
+                                    Rectangle()
+                                        .cornerRadius(10)
+                                        .foregroundColor(.gray)
+                                        .opacity(0.5)
+                                        .padding(.horizontal,-15)
+                                )
+                                
                                 Text(comment.text)
+                                    .padding(.top, 10)
                             }
+                            .frame(width: geometry.size.width - 65)
+                            .padding()
+                            .padding(.top, -15)
+                            .background(Rectangle().cornerRadius(10).foregroundColor(.secondary).opacity(0.5))
+                            .padding(5)
+                            
                         }
                     }
+                    //.background(.black)
+                    .foregroundColor(.white)
+                    .preferredColorScheme(.dark)
                 }
             }
         }
     }
 }
-
+//MARK: 영화 아이디로 받아온 데이터 디코딩
 struct RespoMovie: Decodable {
     let _id: String
     let title: String
