@@ -98,7 +98,8 @@ struct detailView: View {
                                         AsyncImage(url: URL(string: "http://mynf.codershigh.com:8080"+actor.image)) { image in
                                             image.image?
                                                 .resizable()
-                                                .frame(width: 100, height: 100)
+                                                .aspectRatio(contentMode: .fill)
+                                                .frame(height: 100)
                                                 .clipShape(Circle())
                                         }
                                         Text(actor.name)
