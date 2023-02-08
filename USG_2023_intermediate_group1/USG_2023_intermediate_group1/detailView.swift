@@ -17,6 +17,7 @@ struct detailView: View {
     @State var comments = [Comment]()
     @State var MovieDetail : RespoMovie?
     @State var islogin: Bool = false
+    @State var commentsisEmpty = false
     
     @State var progress: Bool = true
     @State var commentInput = ""
@@ -113,9 +114,6 @@ struct detailView: View {
                                             }
                                             Text(actor.name)
                                                 .lineLimit(2)
-                                                .onAppear(){
-                                                    print(actor.name)
-                                                }
                                         }
                                         .frame(width: 100,height: 160)
                                         .padding()
@@ -199,9 +197,13 @@ struct detailView: View {
                             }
                             Button {
                                 if !UserId.isEmpty {
+                                    if !self.commentInput.isEmpty {
                                     user.commentWrite(id: MId, rating: Float(ratingVal), text: commentInput)
-                                    comments.append(Comment(_id: MId, userId: UserId, name: userName, text: commentInput, rating: Float(ratingVal)))
-                                    commentInput = ""
+                                        comments.append(Comment(_id: MId, userId: UserId, name: userName, text: commentInput, rating: Float(ratingVal)))
+                                        commentInput = ""
+                                    } else {
+                                        self.commentsisEmpty = true
+                                    }
                                 } else {
                                     self.islogin = true
                                 }
@@ -216,6 +218,9 @@ struct detailView: View {
                                         .tint(.red)
                                 }
                                 Button("취소"){}
+                            }
+                            .alert("댓글이 비어 등록할 수 없습니다.", isPresented: $commentsisEmpty) {
+                                
                             }
                             
                         }

@@ -21,6 +21,7 @@ struct logins: View {
     
     var body: some View {
         NavigationStack{
+            //로그인 성공시 전 네비게이션 뷰로 넘어감(dismiss)
             if user.loginSuccess {
                 Text("Dismiss")
                     .onAppear(){
@@ -28,6 +29,7 @@ struct logins: View {
                         dismiss()
                     }
             }
+            //MARK: 로그인 뷰
             VStack{
                 Text("로그인")
                     .foregroundColor(.white)
@@ -59,6 +61,7 @@ struct logins: View {
                             .padding(.horizontal, 10)
                     }
                 }.padding()
+                
                 HStack{
                     Button {
                         user.login(id: self.userId, pw: self.userPw)
@@ -79,6 +82,7 @@ struct logins: View {
                     .tint(.secondary)
                     
                 }.preferredColorScheme(.dark)
+                //로그인 반응 메세지
                 Text(user.messages)
                     .foregroundColor(.red)
                     .animation(.easeOut(duration: 0.25), value: user.messages)
@@ -86,7 +90,7 @@ struct logins: View {
         }
     }
 }
-
+//MARK: 주희님이 만드실 프로필 임시 뷰
 struct loginpage: View {
     @AppStorage("UserId") var UserId: String = UserDefaults.standard.string(forKey: "UserId") ?? ""
     var body: some View {
@@ -104,7 +108,7 @@ struct loginpage: View {
         }
     }
 }
-
+//MARK: 회원 가입 뷰
 struct signUps: View {
     
     @Environment(\.dismiss) var dismiss
@@ -116,12 +120,12 @@ struct signUps: View {
     @StateObject var user = User()
     var body: some View {
         VStack{
+            //회원 가입 완료되면 전 뷰로 돌아감 Dissmiss
             if user.signupSuccess {
                 Text("Dismiss")
                     .onAppear(){
                         user.signupSuccess = false
                         dismiss()
-                        print(user.signupSuccess)
                     }
             }
             Text("회원가입")

@@ -14,12 +14,12 @@ struct ContentView: View {
                 .background(.black)
                 .toolbar {
                     NavigationLink {
-                        getMov()
+                        getMov() // 검색
                     } label: {
                         Image(systemName: "magnifyingglass")
                     }
                     NavigationLink {
-                        loginpage()
+                        loginpage() // 프로필
                     } label: {
                         Image(systemName: "person.fill")
                     }
