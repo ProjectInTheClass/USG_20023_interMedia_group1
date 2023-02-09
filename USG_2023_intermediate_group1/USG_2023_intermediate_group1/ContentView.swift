@@ -9,12 +9,23 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        TabView {
-            getMov()
-                .tabItem {
-                    Image(systemName: "popcorn.fill")
-                    Text("무비 장르 검색")
-                }.tag(0)
+        NavigationStack{
+            Text("지원님 뷰")
+                .background(.black)
+                .toolbar {
+                    NavigationLink {
+                        getMov() // 검색
+                    } label: {
+                        Image(systemName: "magnifyingglass")
+                    }
+                    NavigationLink {
+                        loginpage() // 프로필
+                    } label: {
+                        Image(systemName: "person.fill")
+                    }
+                }
+                .navigationTitle(Text("지원님 뷰"))
+                .preferredColorScheme(.dark)
         }
     }
 }

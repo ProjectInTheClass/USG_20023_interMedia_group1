@@ -8,13 +8,24 @@
 import SwiftUI
 
 struct detailView: View {
+    @Environment(\.dismiss) private var dismiss
+    @AppStorage("UserId") var UserId: String = UserDefaults.standard.string(forKey: "UserId") ?? ""
+    @AppStorage("userName") var userName: String = UserDefaults.standard.string(forKey: "userName") ?? ""
+    
     var MId = ""
     @State var actors = [Actors]()
     @State var comments = [Comment]()
     @State var MovieDetail : RespoMovie?
+    @State var islogin: Bool = false
+    @State var commentsisEmpty = false
     
     @State var progress: Bool = true
+    @State var commentInput = ""
     
+    @State var SetStar: Bool = false
+    @State var ratingVal: Double = 5.0
+    
+    @StateObject var user = User()
     init(_id: String = "631f93832d06ff4e337e64b9"){
         self.MId = _id
     }
@@ -29,16 +40,13 @@ struct detailView: View {
             }
             do {
                 let decoder = JSONDecoder()
-                print("1")
                 let response = try decoder.decode(RespoMovie.self, from: data!)
-                print("2")
                 DispatchQueue.main.async {
                     self.actors = response.actors
                     self.comments = response.comments
                     self.MovieDetail = response
                     print(comments.count)
                     progress = false
-                    //print((response.year))
                 }
             }
             catch {
@@ -48,112 +56,214 @@ struct detailView: View {
         task.resume()
     }
     var body: some View {
-        if progress {
-            ProgressView() // 로딩
-                .onAppear(){
-                    getDetails()
-                }
-        } else {
-            GeometryReader { geometry in
-                ScrollView(){
-                    // 영화 포스터
-                    VStack(){
-                        AsyncImage(url: URL(string: "http://mynf.codershigh.com:8080"+MovieDetail!.image)) {img in
-                            //let Images = img.image
-                            ZStack{
-                                img.image?
-                                    .resizable()
-                                    .frame(width:geometry.size.width, height: 300)
-                                    .opacity(0.3)
-                                img.image?
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(height: 300)
-                                
-                            }
+        GeometryReader { geometry in
+            ZStack(){
+                if progress {
+                    ProgressView() // 로딩
+                        .onAppear(){
+                            getDetails()
                         }
-                        // 영화 정보
-                        HStack{
-                            VStack(alignment: .leading){
-                                Text(MovieDetail!.title)
-                                    .font(.largeTitle)
-                                    .bold()
-                                    .padding(.bottom,10)
-                                Text("개봉: " + String(MovieDetail!.year) + " 년")
-                                HStack{
-                                    Text("장르: ")
-                                    ForEach(MovieDetail!.genre, id: \.self){ genre in
-                                        Text(genre+",")
-                                    }
+                } else {
+                    ScrollView(){
+                        // 영화 포스터
+                        VStack(){
+                            HStack{}.frame(height: 30)
+                            AsyncImage(url: URL(string: "http://mynf.codershigh.com:8080"+MovieDetail!.image)) {img in
+                                //let Images = img.image
+                                ZStack{
+                                    img.image?
+                                        .resizable()
+                                        .frame(width:geometry.size.width, height: 300)
+                                        .opacity(0.3)
+                                    img.image?
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(height: 300)
+                                    
                                 }
                             }
-                            .padding(.leading, 10)
-                            Spacer()
-                        }
-                        //MARK: 배우 뷰
-                        ScrollView(.horizontal){
+                            // 영화 정보
                             HStack{
-                                ForEach(actors, id: \._id) { actor in
-                                    VStack{
-                                        AsyncImage(url: URL(string: "http://mynf.codershigh.com:8080"+actor.image)) { image in
-                                            image.image?
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fill)
-                                                .frame(height: 100)
-                                                .clipShape(Circle())
+                                VStack(alignment: .leading){
+                                    Text(MovieDetail!.title)
+                                        .font(.largeTitle)
+                                        .bold()
+                                        .padding(.bottom,10)
+                                    Text("개봉: " + String(MovieDetail!.year) + " 년")
+                                    HStack{
+                                        Text("장르: ")
+                                        ForEach(MovieDetail!.genre, id: \.self){ genre in
+                                            Text(genre+",")
                                         }
-                                        Text(actor.name)
-                                            .lineLimit(2)
-                                            .onAppear(){
-                                                print(actor.name)
-                                            }
                                     }
-                                    .frame(width: 100,height: 160)
-                                    .padding()
-                                    .background(Rectangle().cornerRadius(15).foregroundColor(.secondary).opacity(0.5))
-                                    .padding(5)
                                 }
+                                .padding(.leading, 10)
+                                Spacer()
+                            }
+                            //MARK: 배우 뷰
+                            ScrollView(.horizontal){
+                                HStack{
+                                    ForEach(actors, id: \._id) { actor in
+                                        VStack{
+                                            AsyncImage(url: URL(string: "http://mynf.codershigh.com:8080"+actor.image)) { image in
+                                                image.image?
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fill)
+                                                    .frame(height: 100)
+                                                    .clipShape(Circle())
+                                            }
+                                            Text(actor.name)
+                                                .lineLimit(2)
+                                        }
+                                        .frame(width: 100,height: 160)
+                                        .padding()
+                                        .background(Rectangle().cornerRadius(15).foregroundColor(.secondary).opacity(0.5))
+                                        .padding(5)
+                                    }
+                                }
+                            }
+                            // MARK: 뎃글 뷰
+                            Text("\n댓글")
+                                .font(.title)
+                            ForEach(comments, id: \._id) { comment in
+                                VStack(alignment: .leading){
+                                    HStack(){
+                                        Text(comment.name)
+                                            .bold()
+                                            .font(.headline)
+                                        Text(comment.userId)
+                                        Spacer()
+                                        Image(systemName: "star")
+                                        Text(String(comment.rating))
+                                    }
+                                    .frame(height: 40)
+                                    .background(
+                                        Rectangle()
+                                            .cornerRadius(10)
+                                            .foregroundColor(.gray)
+                                            .opacity(0.5)
+                                            .padding(.horizontal,-15)
+                                    )
+                                    
+                                    Text(comment.text)
+                                        .padding(.top, 10)
+                                }
+                                .frame(width: geometry.size.width - 65)
+                                .padding()
+                                .padding(.top, -15)
+                                .background(Rectangle().cornerRadius(10).foregroundColor(.secondary).opacity(0.5))
+                                .padding(5)
+                                
+                            }
+                            HStack{}.frame(height: 50)
+                        }
+                        //.background(.black)
+                        .foregroundColor(.white)
+                        .preferredColorScheme(.dark)
+                    }
+                    //MARK: 댓글 작성
+                    VStack{
+                        Button {
+                            dismiss()
+                        } label: {
+                            Button {
+                                dismiss()
+                            } label: {
+                                HStack(spacing: 0){
+                                    Image(systemName: "chevron.backward")
+                                        .foregroundColor(.white)
+                                        .padding(10)
+                                    Text("Back")
+                                        .foregroundColor(.white)
+                                    Spacer()
+                                }
+                                .frame(width: geometry.size.width)
+                                .bold()
                             }
                         }
-                        // MARK: 뎃글 뷰
-                        Text("\n댓글")
-                            .font(.title)
-                        ForEach(comments, id: \._id) { comment in
-                            VStack(alignment: .leading){
-                                HStack(){
-                                    Text(comment.name)
-                                        .bold()
-                                        .font(.headline)
-                                    Text(comment.userId)
-                                    Spacer()
+                        .background(.thickMaterial)
+                        Spacer()
+                        HStack{
+                            TextField("댓글을 입력하세요", text: $commentInput)
+                                .autocapitalization(.none)
+                                .disableAutocorrection(true)
+                            Button {
+                                self.SetStar = true
+                            } label: {
+                                HStack{
                                     Image(systemName: "star")
-                                    Text(String(comment.rating))
+                                    Text("\(ratingVal, specifier: "%.1f")")
                                 }
-                                .frame(height: 40)
-                                .background(
-                                    Rectangle()
-                                        .cornerRadius(10)
-                                        .foregroundColor(.gray)
-                                        .opacity(0.5)
-                                        .padding(.horizontal,-15)
-                                )
-                                
-                                Text(comment.text)
-                                    .padding(.top, 10)
                             }
-                            .frame(width: geometry.size.width - 65)
-                            .padding()
-                            .padding(.top, -15)
-                            .background(Rectangle().cornerRadius(10).foregroundColor(.secondary).opacity(0.5))
-                            .padding(5)
+                            Button {
+                                if !UserId.isEmpty {
+                                    if !self.commentInput.isEmpty {
+                                    user.commentWrite(id: MId, rating: Float(ratingVal), text: commentInput)
+                                        comments.append(Comment(_id: MId, userId: UserId, name: userName, text: commentInput, rating: Float(ratingVal)))
+                                        commentInput = ""
+                                    } else {
+                                        self.commentsisEmpty = true
+                                    }
+                                } else {
+                                    self.islogin = true
+                                }
+                            } label: {
+                                Text("등록")
+                                    .foregroundColor(.black)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .alert("로그인이 필요한 서비스 입니다.", isPresented: $islogin) {
+                                NavigationLink(destination: logins()) {
+                                    Text("로그인")
+                                        .tint(.red)
+                                }
+                                Button("취소"){}
+                            }
+                            .alert("댓글이 비어 등록할 수 없습니다.", isPresented: $commentsisEmpty) {
+                                
+                            }
                             
                         }
+                        .tint(Color.white)
+                        .padding(10)
+                        .background(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1)))
                     }
-                    //.background(.black)
-                    .foregroundColor(.white)
-                    .preferredColorScheme(.dark)
+                    if SetStar {
+                        VStack{
+                            Text("별점")
+                            ZStack{
+                                Image(systemName: "star.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 100)
+                                Image(systemName: "star.fill")
+                                    .resizable()
+                                    .foregroundColor(.black)
+                                    .scaledToFit()
+                                    .frame(height: 100)
+                                    .clipShape(Rectangle().size(width: 110,height: 100 - ratingVal * 20))
+                                Image(systemName: "star")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 100)
+                            }
+                            HStack{
+                                Slider(value: $ratingVal, in: 0...5, step: 0.1)
+                                Text("\(ratingVal, specifier: "%.1f")")
+                            }
+                            .padding()
+                            Button {
+                                self.SetStar = false
+                            } label: {
+                                Text("확인")
+                            }
+                        }
+                        .frame(width: 200, height: 260)
+                        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 20))
+                        
+                    }
                 }
-            }
+            }.toolbar(.hidden)
         }
     }
 }

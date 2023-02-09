@@ -15,7 +15,7 @@ struct getMov: View {
     
     var body: some View {
         GeometryReader { geometry in
-            NavigationView{  
+            NavigationStack{  
                 VStack(spacing: 0){
                     HStack{
                         //커스텀 Back 버튼
@@ -71,7 +71,8 @@ struct getMov: View {
                 .background(.black)
                 
             }
-        }.navigationBarBackButtonHidden(true)
+        }.preferredColorScheme(.dark)
+        .toolbar(.hidden)
     }
     
     //MARK: 영화 장르 검색 데이터 가져오기
@@ -106,7 +107,7 @@ struct getMov: View {
         }
         task.resume()
     }
-    
+    //MARK: SearchBar
     func border( _ geometry: GeometryProxy) -> some View {
         ZStack{
             RoundedRectangle(cornerRadius: 10)
@@ -125,15 +126,15 @@ struct getMov: View {
              */
             HStack{
                 Image(systemName: "magnifyingglass")
-                .resizable()
-                .foregroundColor(.gray)
-                .frame(width: 20, height: 20)
+                    .resizable()
+                    .foregroundColor(.gray)
+                    .frame(width: 20, height: 20)
                 TextField( "검색", text: $inputVal)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
                     .foregroundColor(.white)
                     .modifier(PlaceholderStyle(showPlaceHolder: inputVal.isEmpty, placeholder: "검색"))
-                    //.background(.red)
+                //.background(.red)
                     .onSubmit {
                         GetResponse(inputs: inputVal)
                     }
