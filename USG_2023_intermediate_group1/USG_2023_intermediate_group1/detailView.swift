@@ -68,18 +68,35 @@ struct detailView: View {
                         // 영화 포스터
                         VStack(){
                             HStack{}.frame(height: 30)
-                            AsyncImage(url: URL(string: "http://mynf.codershigh.com:8080"+MovieDetail!.image)) {img in
+                            AsyncImage(url: URL(string: "http://mynf.codershigh.com:8080\(MovieDetail!.image ?? "")"))  {img in
                                 //let Images = img.image
                                 ZStack{
-                                    img.image?
-                                        .resizable()
-                                        .frame(width:geometry.size.width, height: 300)
-                                        .opacity(0.3)
-                                    img.image?
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(height: 300)
-                                    
+                                    if MovieDetail!.title == "아바타"{
+                                        img.image?
+                                            .resizable()
+                                            .frame(width:geometry.size.width + 190, height: 300)
+                                            .frame(width:geometry.size.width, height: 300)
+                                            .clipped()
+                                            .opacity(0.3)
+                                        img.image?
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 300/1.49,height: 300)
+                                            .clipped()
+                                            .frame(height: 300)
+                                    }
+                                    else {
+                                        img.image?
+                                            .resizable()
+                                            .frame(width:geometry.size.width, height: 300)
+                                            .opacity(0.3)
+                                        img.image?
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 300/1.47,height: 300)
+                                            .clipped()
+                                            .frame(height: 300)
+                                    }
                                 }
                             }
                             // 영화 정보
@@ -89,11 +106,15 @@ struct detailView: View {
                                         .font(.largeTitle)
                                         .bold()
                                         .padding(.bottom,10)
-                                    Text("개봉: " + String(MovieDetail!.year) + " 년")
+                                    Text("개봉: " + String(MovieDetail!.year ?? 9999) + " 년")
                                     HStack{
                                         Text("장르: ")
                                         ForEach(MovieDetail!.genre, id: \.self){ genre in
-                                            Text(genre+",")
+                                            if MovieDetail?.genre.last == genre {
+                                                Text(genre.trimmingCharacters(in: ["\n"]))
+                                            } else {
+                                                Text(genre.trimmingCharacters(in: ["\n"])+",")
+                                            }
                                         }
                                     }
                                 }
@@ -111,8 +132,9 @@ struct detailView: View {
                                                     .aspectRatio(contentMode: .fill)
                                                     .frame(height: 100)
                                                     .clipShape(Circle())
+                                                    .padding(.bottom, 8)
                                             }
-                                            Text(actor.name)
+                                            Text(actor.name+"\n")
                                                 .lineLimit(2)
                                         }
                                         .frame(width: 100,height: 160)
@@ -161,7 +183,7 @@ struct detailView: View {
                         .foregroundColor(.white)
                         .preferredColorScheme(.dark)
                     }
-                    //MARK: 댓글 작성
+                    //MARK: 네비게이션 뷰 커스텀 Back 버튼
                     VStack{
                         Button {
                             dismiss()
@@ -183,6 +205,7 @@ struct detailView: View {
                         }
                         .background(.thickMaterial)
                         Spacer()
+                        //MARK: 댓글 작성
                         HStack{
                             TextField("댓글을 입력하세요", text: $commentInput)
                                 .autocapitalization(.none)
@@ -271,8 +294,8 @@ struct detailView: View {
 struct RespoMovie: Decodable {
     let _id: String
     let title: String
-    let year: Int
-    let image: String
+    let year: Int?
+    let image: String?
     let genre: [String]
     let actors: [Actors]
     let comments: [Comment]
@@ -292,15 +315,22 @@ struct RespoMovie: Decodable {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
         let dataContainer = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .data)
+        print("ds")
         self._id = try dataContainer.decode(String.self, forKey: ._id)
+        print("ds")
         self.title = try dataContainer.decode(String.self, forKey: .title)
+        print("ds")
         self.year = try dataContainer.decode(Int.self, forKey: .year)
-        self.image = try dataContainer.decode(String.self, forKey: .image)
+        print("ds")
+        self.image = try? dataContainer.decode(String.self, forKey: .image)
+        print("ds")
         self.genre = try dataContainer.decode([String].self, forKey: .genre)
+        print("q")
         self.actors = try dataContainer.decode([Actors].self, forKey: .actors)
+        print("e")
         self.comments = try dataContainer.decode([Comment].self, forKey: .comments)
+        print("no")
     }
 }
 

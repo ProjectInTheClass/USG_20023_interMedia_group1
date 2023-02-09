@@ -166,7 +166,7 @@ struct signUps: View {
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
                         .foregroundColor(.white)
-                        .modifier(PlaceholderStyle(showPlaceHolder: userId.isEmpty, placeholder: "이름"))
+                        .modifier(PlaceholderStyle(showPlaceHolder: name.isEmpty, placeholder: "이름"))
                         .padding(.horizontal, 10)
                 }
             }
