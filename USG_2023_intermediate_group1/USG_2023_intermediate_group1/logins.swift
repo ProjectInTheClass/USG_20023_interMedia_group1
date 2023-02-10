@@ -91,20 +91,50 @@ struct logins: View {
     }
 }
 //MARK: 주희님이 만드실 프로필 임시 뷰
+
 struct loginpage: View {
+    @Environment(\.dismiss) var dismiss
     @AppStorage("UserId") var UserId: String = UserDefaults.standard.string(forKey: "UserId") ?? ""
     var body: some View {
-        if !UserId.isEmpty {
-            Text("\(UserId)로 로그인 됨.")
-            Button {
-                UserId = ""
-            } label: {
-                Text("로그아웃")
-                    .foregroundColor(.red)
-            }
-
-        } else {
-            logins()
+        GeometryReader{ geometry in
+            ZStack{
+                if !UserId.isEmpty {
+                    VStack{
+                        Text("\(UserId)로 로그인 됨.")
+                        Button {
+                            UserId = ""
+                        } label: {
+                            Text("로그아웃")
+                                .foregroundColor(.red)
+                        }
+                    }
+                    
+                } else {
+                    logins()
+                }
+                VStack{
+                    Button {
+                        dismiss()
+                    } label: {
+                        Button {
+                            dismiss()
+                        } label: {
+                            HStack(spacing: 0){
+                                Image(systemName: "chevron.backward")
+                                    .foregroundColor(.white)
+                                    .padding(10)
+                                Text("Back")
+                                    .foregroundColor(.white)
+                                Spacer()
+                            }
+                            .frame(width: geometry.size.width)
+                            .bold()
+                        }
+                    }
+                    .background(.thickMaterial)
+                    Spacer()
+                }
+            }.toolbar(.hidden)
         }
     }
 }

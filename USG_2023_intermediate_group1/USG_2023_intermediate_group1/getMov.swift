@@ -14,14 +14,40 @@ struct getMov: View {
     @Environment(\.dismiss) private var dismiss // 커스텀 Back 버튼 Back 변수
     @State var genreSelected = false
     
-    @State var totalGenres = [String]()
     @State var RandomGenre = Set<String>()
     @State var GenreRArray = [String]()
     @State var movieTotal: Int = 0
+    @State var skip = 0
+    
+    @StateObject var movieFunction = MovieFunction()
     
     var body: some View {
         GeometryReader { geometry in
-            NavigationStack{  
+            NavigationStack{
+                if movieFunction.searchSuccess{
+                    VStack{}.onAppear(){
+                        let response = movieFunction.searchResponse!
+                        self.movieTotal = response.total
+                        if 0 < skip && respo.count < self.movieTotal {
+                            self.respo.append(contentsOf: response.data)
+                        } else {
+                            self.respo = response.data
+                        }
+                        print("\(respo.count), \(response.total)")
+                        movieFunction.searchSuccess = false
+                    }
+                }
+                if movieFunction.allGenreSuccess {
+                    VStack{}.onAppear(){
+                        let response = movieFunction.genreResponse!
+                        while RandomGenre.count != 6 {
+                            let str = response.data.randomElement()!.trimmingCharacters(in: ["\n"])
+                            RandomGenre.insert(str)
+                        }
+                        GenreRArray.append(contentsOf: Array(RandomGenre))
+                        movieFunction.allGenreSuccess = false
+                    }
+                }
                 VStack(spacing: 0){
                     HStack{
                         //커스텀 Back 버튼
@@ -40,66 +66,73 @@ struct getMov: View {
                     if respo.isEmpty{
                         genreRecommand(geometry)
                             .onAppear(){
-                                totalGenre()
+                                movieFunction.totalGenre()
                             }
                     }
-                    /*
-                    if !genreSelected && isresultsEmpty{
-                        genreView(geometry: geometry, inputValue: $inputValue, genreSelected: $genreSelected)
-                    } else {
-                        VStack{}.onAppear(){
-                            GetResponse(inputs: inputValue)
-                        }
-                    }*/
                 // 검색 결과 있으면 리스트 그림.
                     if !isresultsEmpty {
                         //MARK: 리스트
-                        List(respo, id: \._id) { Rdata in
-                            NavigationLink(destination: detailView(_id: Rdata._id)){
-                                HStack{
-                                    AsyncImage(url: URL(string: "http://mynf.codershigh.com:8080\(Rdata.image ?? "")")){ img in
-                                        img
-                                            .resizable()
-                                            .scaledToFill()
-                                            //.aspectRatio(contentMode: .fill)
-                                            .frame(width: 100/1.47,height: 100)
-                                            .clipped()
-                                    } placeholder: {
-                                        Rectangle()
-                                            .cornerRadius(10)
-                                            .foregroundColor(.secondary)
-                                            .frame(width: 100/sqrt(2),height: 100)
-                                    }
-                                    VStack(alignment: .leading){
-                                        Text(Rdata.title)
-                                            .font(.title2)
-                                            .bold()
-                                            .padding(.bottom, 5)
+                        ScrollView{
+                            LazyVStack(alignment: .leading){
+                                ForEach(respo, id: \._id) { Rdata in
+                                    NavigationLink(destination: detailView(_id: Rdata._id)){
                                         HStack{
-                                            //Text("장르: ")
-                                            ForEach(Rdata.genre , id: \.self){ genre in
-                                                if Rdata.genre.last == genre {
-                                                    Text(genre.trimmingCharacters(in: ["\n"]))
-                                                } else {
-                                                    Text(genre.trimmingCharacters(in: ["\n"])+",")
+                                            AsyncImage(url: URL(string: "http://mynf.codershigh.com:8080\(Rdata.image ?? "")")){ img in
+                                                img
+                                                    .resizable()
+                                                    .scaledToFill()
+                                                    //.aspectRatio(contentMode: .fill)
+                                                    .frame(width: 100/1.47,height: 100)
+                                                    .clipped()
+                                            } placeholder: {
+                                                Rectangle()
+                                                    .cornerRadius(10)
+                                                    .foregroundColor(.secondary)
+                                                    .frame(width: 100/sqrt(2),height: 100)
+                                            }
+                                            .padding(.leading)
+                                            VStack(alignment: .leading){
+                                                Text(Rdata.title)
+                                                    .font(.title2)
+                                                    .bold()
+                                                    .padding(.bottom, 5)
+                                                HStack{
+                                                    //Text("장르: ")
+                                                    ForEach(Rdata.genre , id: \.self){ genre in
+                                                        if Rdata.genre.last == genre {
+                                                            Text(genre.trimmingCharacters(in: ["\n"]))
+                                                        } else {
+                                                            Text(genre.trimmingCharacters(in: ["\n"])+",")
+                                                        }
+                                                    }
                                                 }
                                             }
+                                            .padding(5)
+                                                .foregroundColor(.white)
+                                                Spacer()
+                                        }//.frame(width: geometry.size.width)
+                                    }
+                                    .preferredColorScheme(.dark)
+                                    
+                                }
+                                
+                                .ignoresSafeArea(.all, edges: .bottom)
+                                .background(.black)
+                                if self.movieTotal != respo.count{
+                                    Image(systemName: "chevron.compact.down")
+                                        .onAppear(){
+                                            self.skip = respo.count
+                                            movieFunction.GetResponse(inputs: inputValue, skip: self.skip)
+                                            print("버튼 실행함")
                                         }
-                                    }.padding(5)
+                                        .foregroundColor(.white)
+                                        .font(.title)
+                                        .frame(width: geometry.size.width)
                                 }
                             }
-                            .preferredColorScheme(.dark)
-                            
                         }
-                        .listStyle(.plain)
-                        .ignoresSafeArea(.all, edges: .bottom)
-                        .background(.black)
-                        if self.movieTotal != respo.count{
-                            Button("더보기"){
-                                GetResponse(inputs: inputValue, skip: respo.count)
-                                print("버튼 실행함")
-                            }
-                        }
+                        
+                        
                 // 검색 결과 검색 결과 없음 전시
                     } else {
                         Text("\n검색 결과 없음.")
@@ -112,78 +145,6 @@ struct getMov: View {
             }
         }.preferredColorScheme(.dark)
         .toolbar(.hidden)
-    }
-    
-    //MARK: 영화 장르 검색 데이터 가져오기
-    func GetResponse(inputs: String, skip: Int) {
-        let urlStr = "http://mynf.codershigh.com:8080/api/movies?genre=\(inputs)&skip=\(skip)"
-        print(urlStr)
-        let UrlEncode = urlStr.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        let url = URL(string: UrlEncode)!
-        let request = URLRequest(url: url)
-        let task = URLSession.shared.dataTask(with: request) { data, URLResponse, error in
-            if error != nil || data == nil {
-                return
-            }
-            do {
-                let decoder = JSONDecoder()
-                let response = try decoder.decode(Response.self, from: data!)
-                let resultCount = response.total
-                if resultCount == 0 {
-                    self.isresultsEmpty = true
-                    print(resultCount)
-                    
-                } else {
-                    self.isresultsEmpty = false
-                }
-                DispatchQueue.main.async {
-                    
-                    self.movieTotal = response.total
-                    if respo.count < self.movieTotal && skip > 0 {
-                        self.respo.append(contentsOf: response.data)
-                    } else {
-                        self.respo = response.data
-                    }
-                    print("\(respo.count), \(response.total)")
-                    
-                }
-            }
-            catch {
-                print("캐치")
-            }
-        }
-        task.resume()
-    }
-    
-    //MARK: 전체 장르 종류 가져오기
-    func totalGenre() {
-        let urlStr = "http://mynf.codershigh.com:8080/api/genres"
-        let UrlEncode = urlStr.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        let url = URL(string: UrlEncode)!
-        let request = URLRequest(url: url)
-        let task = URLSession.shared.dataTask(with: request) { data, URLResponse, error in
-            if error != nil || data == nil {
-                return
-            }
-            do {
-                let decoder = JSONDecoder()
-                let response = try decoder.decode(genreRespo.self, from: data!)
-                print(response.message)
-                DispatchQueue.main.async {
-                    while RandomGenre.count != 6 {
-                        let str = response.data.randomElement()!.trimmingCharacters(in: ["\n"])
-                        RandomGenre.insert(str)
-                    }
-                    GenreRArray.append(contentsOf: Array(RandomGenre))
-                    self.totalGenres = response.data
-                    //print(GenreRArray)
-                }
-            }
-            catch {
-                
-            }
-        }
-        task.resume()
     }
     
     //MARK: SearchBar
@@ -205,7 +166,8 @@ struct getMov: View {
                     .modifier(PlaceholderStyle(showPlaceHolder: inputValue.isEmpty, placeholder: "검색"))
                 //.background(.red)
                     .onSubmit {
-                        GetResponse(inputs: inputValue, skip: 0)
+                        self.skip = 0
+                        movieFunction.GetResponse(inputs: inputValue, skip: skip)
                     }
                 if !inputValue.isEmpty {
                     Button {
@@ -231,7 +193,8 @@ struct getMov: View {
                 ForEach(0..<GenreRArray.count/2, id: \.self) { i in
                     Button {
                         inputValue = GenreRArray[i]
-                        GetResponse(inputs: GenreRArray[i], skip: 0)
+                        self.skip = 0
+                            movieFunction.GetResponse(inputs: GenreRArray[i], skip: skip)
                     } label: {
                         Text(GenreRArray[i])
                             .font(.title3)
@@ -243,8 +206,8 @@ struct getMov: View {
             VStack{
                 ForEach(GenreRArray.count/2..<GenreRArray.count, id: \.self) { i in
                     Button {
-                        inputValue = GenreRArray[i]
-                        GetResponse(inputs: GenreRArray[i], skip: 0)
+                        self.skip = 0
+                            movieFunction.GetResponse(inputs: GenreRArray[i], skip: skip)
                     } label: {
                         Text(GenreRArray[i])
                             .font(.title3)

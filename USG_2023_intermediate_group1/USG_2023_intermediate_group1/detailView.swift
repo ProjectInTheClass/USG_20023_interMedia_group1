@@ -83,7 +83,6 @@ struct detailView: View {
                                             .scaledToFill()
                                             .frame(width: 300/1.49,height: 300)
                                             .clipped()
-                                            .frame(height: 300)
                                     }
                                     else {
                                         img.image?

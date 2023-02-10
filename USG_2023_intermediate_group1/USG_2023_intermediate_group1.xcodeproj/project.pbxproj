@@ -17,6 +17,9 @@
 		033F015E299112EA005B8D15 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033F015D299112EA005B8D15 /* ContentView.swift */; };
 		033F0160299112EC005B8D15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 033F015F299112EC005B8D15 /* Assets.xcassets */; };
 		033F0163299112EC005B8D15 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 033F0162299112EC005B8D15 /* Preview Assets.xcassets */; };
+		03D37DFF299570A600F1FF5E /* MovieFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D37DFE299570A600F1FF5E /* MovieFunction.swift */; };
+		03D37E012995C43300F1FF5E /* GenreStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D37E002995C43300F1FF5E /* GenreStack.swift */; };
+		03D37E032995D75600F1FF5E /* HomeRecommandMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D37E022995D75600F1FF5E /* HomeRecommandMovie.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +35,9 @@
 		033F015D299112EA005B8D15 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		033F015F299112EC005B8D15 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		033F0162299112EC005B8D15 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		03D37DFE299570A600F1FF5E /* MovieFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieFunction.swift; sourceTree = "<group>"; };
+		03D37E002995C43300F1FF5E /* GenreStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreStack.swift; sourceTree = "<group>"; };
+		03D37E022995D75600F1FF5E /* HomeRecommandMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRecommandMovie.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,9 +73,12 @@
 				03319B9129911DD600BBFBB7 /* USG-2023-intermediate-group1-Info.plist */,
 				033F015B299112EA005B8D15 /* USG_2023_intermediate_group1App.swift */,
 				033F015D299112EA005B8D15 /* ContentView.swift */,
+				03D37E002995C43300F1FF5E /* GenreStack.swift */,
+				03D37E022995D75600F1FF5E /* HomeRecommandMovie.swift */,
 				0316DDC129935B5000D020DA /* logins.swift */,
 				0316DDC329935D4400D020DA /* User.swift */,
 				0316DDBF299359E100D020DA /* getMov.swift */,
+				03D37DFE299570A600F1FF5E /* MovieFunction.swift */,
 				031A8ED829914F87009B6B31 /* detailView.swift */,
 				031A8ED229912B3D009B6B31 /* PlaceholderStyle.swift */,
 				033F015F299112EC005B8D15 /* Assets.xcassets */,
@@ -157,11 +166,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				03D37E032995D75600F1FF5E /* HomeRecommandMovie.swift in Sources */,
 				0316DDC229935B5000D020DA /* logins.swift in Sources */,
 				031A8ED329912B3D009B6B31 /* PlaceholderStyle.swift in Sources */,
 				031A8ED929914F88009B6B31 /* detailView.swift in Sources */,
 				031A8ED129912B30009B6B31 /* PlaceholderStyle.swift in Sources */,
+				03D37DFF299570A600F1FF5E /* MovieFunction.swift in Sources */,
 				0316DDC429935D4400D020DA /* User.swift in Sources */,
+				03D37E012995C43300F1FF5E /* GenreStack.swift in Sources */,
 				0316DDC0299359E100D020DA /* getMov.swift in Sources */,
 				033F015E299112EA005B8D15 /* ContentView.swift in Sources */,
 				033F015C299112EA005B8D15 /* USG_2023_intermediate_group1App.swift in Sources */,
@@ -288,7 +300,6 @@
 		033F0167299112EC005B8D15 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -298,9 +309,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "USG-2023-intermediate-group1-Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -308,16 +317,18 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dazabamuker.USG-2023-intermediate-group1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
 		033F0168299112EC005B8D15 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -327,9 +338,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "USG-2023-intermediate-group1-Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -337,9 +346,12 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dazabamuker.USG-2023-intermediate-group1";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
