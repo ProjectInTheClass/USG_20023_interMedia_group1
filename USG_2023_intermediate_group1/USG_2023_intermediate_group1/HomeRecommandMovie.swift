@@ -46,7 +46,6 @@ struct HomeRecommandMovie: View {
         }.onAppear(){
             RecommandedMovie(genre: self.genre ?? "")
         }
-        .background(.red)
     }
     
     func RecommandedMovie(genre: String) {

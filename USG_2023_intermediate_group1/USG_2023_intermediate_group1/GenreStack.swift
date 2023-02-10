@@ -31,18 +31,22 @@ struct GenreStack: View {
                         ProgressView()
                     }
                     ForEach(movieArray, id: \._id) { movie in
-                        AsyncImage(url: URL(string: "http://mynf.codershigh.com:8080\(movie.image ?? "")")){ img in
-                            img
-                                .resizable()
-                                .scaledToFill()
-                            //.aspectRatio(contentMode: .fill)
-                                .frame(width: 200/1.47,height: 200)
-                                .clipped()
-                        } placeholder: {
-                            Rectangle()
-                                .cornerRadius(10)
-                                .foregroundColor(.secondary)
-                                .frame(width: 100/sqrt(2),height: 100)
+                        NavigationLink {
+                            detailView(_id: movie._id)
+                        } label: {
+                            AsyncImage(url: URL(string: "http://mynf.codershigh.com:8080\(movie.image ?? "")")){ img in
+                                img
+                                    .resizable()
+                                    .scaledToFill()
+                                //.aspectRatio(contentMode: .fill)
+                                    .frame(width: 200/1.47,height: 200)
+                                    .clipped()
+                            } placeholder: {
+                                Rectangle()
+                                    .cornerRadius(10)
+                                    .foregroundColor(.secondary)
+                                    .frame(width: 100/sqrt(2),height: 100)
+                            }
                         }
                     }
                 }
