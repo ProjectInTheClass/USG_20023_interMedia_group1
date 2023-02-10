@@ -1,6 +1,6 @@
 # 영화 정보 가져오기
 <p float="left">
-<img src="./image%20source/dazabaSearch.png" width="200"/>
+<img src="./image%20source/abwMainView.png" width="200"/>
 <img src="./image%20source/abwdetailView.png" width="200"/>
 <img src="./image%20source/abwdetailView01.png" width="200"/>
 <img src="./image%20source/abwdetailView02.png" width="200"/>
