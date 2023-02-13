@@ -97,7 +97,7 @@ struct getMov: View {
                                                     .bold()
                                                     .padding(.bottom, 5)
                                                 HStack{
-                                                    //Text("장르: ")
+                                                    // 장르가 \n이 있는 동일한 장르 \n 제거
                                                     ForEach(Rdata.genre , id: \.self){ genre in
                                                         if Rdata.genre.last == genre {
                                                             Text(genre.trimmingCharacters(in: ["\n"]))
@@ -119,6 +119,8 @@ struct getMov: View {
                                 .ignoresSafeArea(.all, edges: .bottom)
                                 .background(.black)
                                 if self.movieTotal != respo.count{
+                                    //MARK: 더 많은 데이터 로딩
+                                    // 아래 이미지 나타나면 데이터 가져옴.
                                     Image(systemName: "chevron.compact.down")
                                         .onAppear(){
                                             self.skip = respo.count
@@ -159,7 +161,7 @@ struct getMov: View {
                     .resizable()
                     .foregroundColor(.gray)
                     .frame(width: 20, height: 20)
-                TextField( "검색", text: $inputValue)
+                TextField( "장르 검색", text: $inputValue)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
                     .foregroundColor(.white)

@@ -19,7 +19,7 @@ struct ContentView: View {
         GeometryReader{ geometry in
             NavigationStack{
                 ScrollView{
-                    if movieFunction.allGenreSuccess {
+                    if movieFunction.allGenreSuccess && GenreRArray.isEmpty {
                         VStack{}.onAppear(){
                             let response = movieFunction.genreResponse!
                             while RandomGenre.count != 6 {

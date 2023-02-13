@@ -11,7 +11,6 @@ struct logins: View {
     
     @AppStorage("UserId") var UserId: String = UserDefaults.standard.string(forKey: "UserId") ?? ""
     
-    
     @State var userId: String = ""
     @State var userPw: String = ""
     
@@ -63,6 +62,7 @@ struct logins: View {
                 }.padding()
                 
                 HStack{
+                    //MARK: 로그인 버튼
                     Button {
                         user.login(id: self.userId, pw: self.userPw)
                     } label: {
@@ -72,6 +72,8 @@ struct logins: View {
                     .buttonStyle(.borderedProminent)
                     .tint(.red.opacity(0.7))
                     .padding(.horizontal)
+                    
+                    //MARK: 회원가입 버튼
                     NavigationLink {
                         signUps(userId: $userId, userPw: $userPw)
                     } label: {
@@ -138,7 +140,8 @@ struct loginpage: View {
         }
     }
 }
-//MARK: 회원 가입 뷰
+
+//MARK: - 회원 가입 뷰
 struct signUps: View {
     
     @Environment(\.dismiss) var dismiss

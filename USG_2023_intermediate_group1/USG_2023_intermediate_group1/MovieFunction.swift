@@ -15,7 +15,7 @@ class MovieFunction: ObservableObject {
     
     //MARK: 영화 장르 검색 데이터 가져오기
     func GetResponse(inputs: String, skip: Int) {
-        let urlStr = "http://mynf.codershigh.com:8080/api/movies?genre=\(inputs)&skip=\(skip)"
+        let urlStr = "http://mynf.codershigh.com:8080/api/movies?genre=\(inputs)&skip=\(skip)" //skip에 따라 데이터 건너띄고 가져옴.
         print(urlStr)
         let UrlEncode = urlStr.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let url = URL(string: UrlEncode)!
