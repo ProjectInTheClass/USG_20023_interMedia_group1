@@ -169,11 +169,11 @@ struct getMov: View {
                     .resizable()
                     .foregroundColor(.gray)
                     .frame(width: 20, height: 20)
-                TextField( "장르 검색", text: $inputValue)
+                TextField( "", text: $inputValue)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
                     .foregroundColor(.white)
-                    .modifier(PlaceholderStyle(showPlaceHolder: inputValue.isEmpty, placeholder: "검색"))
+                    .modifier(PlaceholderStyle(showPlaceHolder: inputValue.isEmpty, placeholder: "장르 검색"))
                 //.background(.red)
                     .onSubmit {
                         self.skip = 0
@@ -255,7 +255,6 @@ struct Response: Decodable {
         self.total = try pagingContainer.decode(Int.self, forKey: .total)
         self.skip = try pagingContainer.decode(Int.self, forKey: .skip)
     }
-    
 }
 
 struct Movie: Codable {
