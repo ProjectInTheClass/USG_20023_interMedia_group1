@@ -3,7 +3,7 @@
 //  NeotubeKaraoke
 //
 //  Created by 안병욱 on 2022/12/27.
-//
+//. placeholder 색 변화하기 위한 구조체
 
 import SwiftUI
 public struct PlaceholderStyle: ViewModifier {

@@ -3,7 +3,7 @@
 //  USG_2023_intermediate_group1
 //
 //  Created by 안병욱 on 2023/02/10.
-//
+// 홈 장르별 영화 가로 스크롤 뷰
 
 import SwiftUI
 

@@ -2,7 +2,7 @@
 //  getMov.swift
 //
 //  Created by 안병욱 on 2023/01/30.
-//
+// 검색창
 
 import SwiftUI
 
@@ -24,23 +24,31 @@ struct getMov: View {
     var body: some View {
         GeometryReader { geometry in
             NavigationStack{
-                if movieFunction.searchSuccess{
-                    VStack{}.onAppear(){
+                if movieFunction.searchSuccess {
+                    VStack{}.onAppear(){ // 뷰에서 클로져 실행 위해 임시 뷰 그리고 뷰가 그려질 경우 실행할 클로져.
                         let response = movieFunction.searchResponse!
                         self.movieTotal = response.total
+                        
+                        // 검색 결과로 영화가 10개 보다 많으면 데이터를 배열에 추가
                         if 0 < skip && respo.count < self.movieTotal {
                             self.respo.append(contentsOf: response.data)
+                            
+                        // 검색 결과가 10개 보다 적으면 배열 대체
                         } else {
                             self.respo = response.data
                         }
                         print("\(respo.count), \(response.total)")
-                        movieFunction.searchSuccess = false
+                        movieFunction.searchSuccess = false // 임시 VStack 삭제용.
                     }
                 }
                 if movieFunction.allGenreSuccess {
                     VStack{}.onAppear(){
+                        //검색 장르 6개 가져옴.
                         let response = movieFunction.genreResponse!
                         while RandomGenre.count != 6 {
+                            
+                            // 장르가 서버에서 데이터를 가져오면 \n이 들어있어 뷰가 이상하게 그려지고 동일항 장르 전시 됨.
+                            // trimmingCharacters 로 \n을 제거
                             let str = response.data.randomElement()!.trimmingCharacters(in: ["\n"])
                             RandomGenre.insert(str)
                         }

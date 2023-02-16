@@ -3,12 +3,12 @@
 //  USG_2023_intermediate_group1
 //
 //  Created by 안병욱 on 2023/02/08.
-//
+//  로그인과 회원가입에서 겹치는 부분이 많아 간단하게 정리하기 위하여 가져옴.
 
 import Foundation
 import SwiftUI
 
-class User: ObservableObject {
+final class User: ObservableObject {
     
     @AppStorage("userToken") var userToken: String = UserDefaults.standard.string(forKey: "userToken") ?? ""
     @AppStorage("userName") var userName: String = UserDefaults.standard.string(forKey: "userName") ?? ""
@@ -18,26 +18,29 @@ class User: ObservableObject {
     @Published var signupSuccess: Bool = false
     @Published var messages = ""
     
+    
+    //MARK: - 로그인과 회원가입
     func login(id: String, pw: String) {
         let loginInfo = loginInfo(id: id, password: pw)
         let loginData: Data = try! JSONEncoder().encode(loginInfo)
         let sel = "login"
-        Postuserinfo(sel: sel, loginData: loginData, uid: id)
+        Postuserinfo(sel: sel, bodyData: loginData, userIds: id)
     }
     
     func signUp(id: String, pw: String, name: String) {
         let signupInfo = signupInfo(id: id, password: pw, name: name)
         let signupData: Data = try! JSONEncoder().encode(signupInfo)
         let sel = "signup"
-        Postuserinfo(sel: sel, loginData: signupData, uid: id)
+        Postuserinfo(sel: sel, bodyData: signupData, userIds: id)
     }
     
-    func Postuserinfo(sel: String, loginData: Data, uid: String){
+    // sel 에 따라 url이 달라지기 때문에 sel을 프로퍼티로 받아오고 관련 데이터르 가져와 바디
+    func Postuserinfo(sel: String, bodyData: Data, userIds: String){
         let url = URL(string: "http://mynf.codershigh.com:8080/api/auth/\(sel)")
         var request = URLRequest(url: url!)
         request.httpMethod = "POST"
         
-        request.httpBody = loginData
+        request.httpBody = bodyData
         request.setValue("application/json", forHTTPHeaderField: "Content-type")
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if error != nil || data == nil {
@@ -49,6 +52,8 @@ class User: ObservableObject {
                 print(responses.message)
                 let message = responses.message
                 DispatchQueue.main.async {
+
+                    // 로그인 메세지에 따른 유저와의 상화작용이 필요하여 대응 메세지를 작성하였다.
                     if message == "유저 없음" {
                         self.UserId = ""
                         self.messages = "아이디가 일치하지 않습니다."
@@ -56,25 +61,30 @@ class User: ObservableObject {
                     } else if message == "로그인 실패"{
                         self.UserId = ""
                         self.messages = "비밀 번호가 없거나 일치하지 않습니다."
-                        
                         return
+                        
+                    // 회원 가입 대응 메세지
+                    } else if message == "이미 등록된 유저가 있습니다." {
+                        self.UserId = ""
+                        self.messages = "이미 동록된 아이디 입니다."
+                        self.signupSuccess = false
+                        return
+                        
+                    // 로그인 성공 & 회원가입 성공
                     } else if message == "ok" {
                         self.userToken = responses.data?.token ?? "nil"
                         self.userName = responses.data?.name ?? "nil"
                         print(self.userToken)
-                        self.UserId = uid
+                        self.UserId = userIds
                         self.loginSuccess = true
-                        
-                    } else if message == "ok" {
-                        self.signupSuccess = true
-                        
-                    } else if message == "이미 등록된 유저가 있습니다." {
-                        self.UserId = ""
-                        self.messages = "이미 동록된 아이디 입니다."
-                        return
+                        if !self.signupSuccess {
+                            self.signupSuccess = true
+                        }
                     } else {
                         self.messages = message
                         self.UserId = ""
+                        self.signupSuccess = false
+                        
                     }
                 }
             }
@@ -84,6 +94,8 @@ class User: ObservableObject {
         task.resume()
     }
     
+    
+    //MARK: - 댓글 POST
     func commentWrite(id: String, rating: Float, text: String) {
         let comment = commentWriting(rating: rating, text: text)
         let data = try! JSONEncoder().encode(comment)
@@ -92,6 +104,9 @@ class User: ObservableObject {
         request.httpMethod = "POST"
         request.httpBody = data
         request.setValue("application/json", forHTTPHeaderField: "Content-type")
+        
+        //로그인시 받아온 토큰을 http 헤더에 보내주어야함.
+        // bearer YOUR-token -> API 서버에 인증 방법이 나와 있다.
         request.setValue("Bearer \(userToken)", forHTTPHeaderField: "Authorization")
         
         let task = URLSession.shared.dataTask(with: request) { data, Response, error in
@@ -101,7 +116,7 @@ class User: ObservableObject {
             }
             do {
                 let responses = try JSONDecoder().decode(commentResponse.self, from: data!)
-                print(responses.message)
+                print(responses.message) // 에러만 나지 않는 다면 메세지 외 data를 저장할 필요가 없어 보여 저장하지 않았다.
             }
             catch{
                 

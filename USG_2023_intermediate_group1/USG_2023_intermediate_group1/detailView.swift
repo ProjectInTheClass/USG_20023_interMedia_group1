@@ -30,6 +30,7 @@ struct detailView: View {
         self.MId = _id
     }
     
+    //MARK: 영화 세부 데이터 가져옴.
     func getDetails(){
         let urlStr = "http://mynf.codershigh.com:8080/api/movies/\(MId)"
         let url = URL(string: urlStr)!
@@ -55,6 +56,7 @@ struct detailView: View {
         }
         task.resume()
     }
+    
     var body: some View {
         GeometryReader { geometry in
             ZStack(){
@@ -71,13 +73,15 @@ struct detailView: View {
                             AsyncImage(url: URL(string: "http://mynf.codershigh.com:8080\(MovieDetail!.image ?? "")"))  {img in
                                 //let Images = img.image
                                 ZStack{
-                                    if MovieDetail!.title == "아바타"{
+                                    if MovieDetail!.title == "아바타"{ // 아바타는 죄가 많다.
+                                       
                                         img.image?
                                             .resizable()
                                             .frame(width:geometry.size.width + 190, height: 300)
                                             .frame(width:geometry.size.width, height: 300)
                                             .clipped()
                                             .opacity(0.3)
+                                        
                                         img.image?
                                             .resizable()
                                             .scaledToFill()
@@ -85,10 +89,12 @@ struct detailView: View {
                                             .clipped()
                                     }
                                     else {
+                                        // 포스터 투명도 준다음 화면 크기에 맞게 가로로 늘림.
                                         img.image?
                                             .resizable()
                                             .frame(width:geometry.size.width, height: 300)
                                             .opacity(0.3)
+                                        // 원본 포스터 가져옴
                                         img.image?
                                             .resizable()
                                             .scaledToFill()
@@ -107,6 +113,8 @@ struct detailView: View {
                                         .padding(.bottom,10)
                                     Text("개봉: " + String(MovieDetail!.year ?? 9999) + " 년")
                                     HStack{
+                                        // 장르가 서버에서 데이터를 가져오면 \n이 들어있어 뷰가 이상하게 그려지고 동일항 장르 전시 됨.
+                                        // trimmingCharacters 로 \n을 제거하고 마지막 장르 전시 후 ',' 제거
                                         Text("장르: ")
                                         ForEach(MovieDetail!.genre, id: \.self){ genre in
                                             if MovieDetail?.genre.last == genre {
@@ -234,6 +242,7 @@ struct detailView: View {
                                     .foregroundColor(.black)
                             }
                             .buttonStyle(.borderedProminent)
+                            // 로그인 안된 경우에 댓글 작성하려할 경우 대응 메세지
                             .alert("로그인이 필요한 서비스 입니다.", isPresented: $islogin) {
                                 NavigationLink(destination: logins()) {
                                     Text("로그인")
@@ -250,6 +259,7 @@ struct detailView: View {
                         .padding(10)
                         .background(Color(UIColor(red: 0.13, green: 0.13, blue: 0.13, alpha: 1)))
                     }
+                    // MARK: 별점 설정 뷰
                     if SetStar {
                         VStack{
                             Text("별점")
@@ -263,7 +273,7 @@ struct detailView: View {
                                     .foregroundColor(.black)
                                     .scaledToFit()
                                     .frame(height: 100)
-                                    .clipShape(Rectangle().size(width: 110,height: 100 - ratingVal * 20))
+                                    .clipShape(Rectangle().size(width: 110,height: 100 - ratingVal * 20)) // 클립 원점이 상단이라 반대로 설정.
                                 Image(systemName: "star")
                                     .resizable()
                                     .scaledToFit()

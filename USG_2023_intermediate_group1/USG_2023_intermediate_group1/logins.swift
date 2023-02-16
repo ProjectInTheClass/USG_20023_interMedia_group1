@@ -3,7 +3,7 @@
 //  USG_2023_intermediate_group1
 //
 //  Created by 안병욱 on 2023/02/08.
-//
+// 로그인 페이지
 
 import SwiftUI
 
@@ -100,6 +100,7 @@ struct loginpage: View {
     var body: some View {
         GeometryReader{ geometry in
             ZStack{
+                // 로그인 되어 있으면 그리는 뷰
                 if !UserId.isEmpty {
                     VStack{
                         Text("\(UserId)로 로그인 됨.")
@@ -112,9 +113,11 @@ struct loginpage: View {
                     }
                     
                 } else {
+                    // 로그인 되어 있지 않으면 로그인 뷰 그림.
                     logins()
                 }
                 VStack{
+                    // 커스텀 BACK 버튼
                     Button {
                         dismiss()
                     } label: {
@@ -167,7 +170,7 @@ struct signUps: View {
                 .bold()
             VStack{
                 ZStack{
-                    RoundedRectangle(cornerRadius: 10)
+                    RoundedRectangle(cornerRadius: 10) // TextFiled 디자인
                         .frame(height: 40)
                     //.padding(.trailing,-5)
                         .foregroundColor(Color(UIColor(red: 67/255, green: 66/255, blue: 66/255, alpha: 1)))
@@ -179,7 +182,7 @@ struct signUps: View {
                         .padding(.horizontal, 10)
                 }
                 ZStack{
-                    RoundedRectangle(cornerRadius: 10)
+                    RoundedRectangle(cornerRadius: 10)  // TextFiled 디자인
                         .frame(height: 40)
                     //.padding(.trailing,-5)
                         .foregroundColor(Color(UIColor(red: 67/255, green: 66/255, blue: 66/255, alpha: 1)))
@@ -191,7 +194,7 @@ struct signUps: View {
                         .padding(.horizontal, 10)
                 }
                 ZStack{
-                    RoundedRectangle(cornerRadius: 10)
+                    RoundedRectangle(cornerRadius: 10)  // TextFiled 디자인
                         .frame(height: 40)
                     //.padding(.trailing,-5)
                         .foregroundColor(Color(UIColor(red: 67/255, green: 66/255, blue: 66/255, alpha: 1)))
@@ -204,6 +207,8 @@ struct signUps: View {
                 }
             }
             //.padding()
+            
+            // 회원 가입 버튼
             Button {
                 user.signUp(id: self.userId, pw: self.userPw, name: self.name)
                 //dismiss()
