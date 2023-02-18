@@ -173,7 +173,7 @@ struct getMov: View {
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
                     .foregroundColor(.white)
-                    .modifier(PlaceholderStyle(showPlaceHolder: inputValue.isEmpty, placeholder: "장르 검색"))
+                    .modifier(PlaceholderStyle(showPlaceHolder: inputValue.isEmpty, placeholder: "장르 검색", color: Color.gray))
                 //.background(.red)
                     .onSubmit {
                         self.skip = 0
@@ -230,43 +230,6 @@ struct getMov: View {
     }
 }
 
-//MARK: Response 디코드
-struct Response: Decodable {
-    let message: String
-    let data: [Movie]
-    let total: Int
-    let skip: Int
-    
-    enum CodingKeys: String, CodingKey {
-        case message
-        case data
-        case total
-        case skip
-        
-        case paging
-    }
-    
-    init(from decoder: Decoder) throws {
-        let Contaniner = try decoder.container(keyedBy: CodingKeys.self)
-        self.data = try Contaniner.decode([Movie].self, forKey: .data)
-        self.message = try Contaniner.decode(String.self, forKey: .message)
-        
-        let pagingContainer = try Contaniner.nestedContainer(keyedBy: CodingKeys.self, forKey: .paging)
-        self.total = try pagingContainer.decode(Int.self, forKey: .total)
-        self.skip = try pagingContainer.decode(Int.self, forKey: .skip)
-    }
-}
-
-struct Movie: Codable {
-    let title: String
-    let _id: String
-    let image: String?
-    let genre: [String]
-}
-struct genreRespo: Decodable {
-    let message: String
-    let data: [String]
-}
 
 struct getMov_Previews: PreviewProvider {
     static var previews: some View {

@@ -44,7 +44,7 @@ struct logins: View {
                             .autocapitalization(.none)
                             .disableAutocorrection(true)
                             .foregroundColor(.white)
-                            .modifier(PlaceholderStyle(showPlaceHolder: userId.isEmpty, placeholder: "아이디"))
+                            .modifier(PlaceholderStyle(showPlaceHolder: userId.isEmpty, placeholder: "아이디", color: Color.gray))
                             .padding(.horizontal, 10)
                     }
                     ZStack{
@@ -56,7 +56,7 @@ struct logins: View {
                             .autocapitalization(.none)
                             .disableAutocorrection(true)
                             .foregroundColor(.white)
-                            .modifier(PlaceholderStyle(showPlaceHolder: userPw.isEmpty, placeholder: "비밀번호"))
+                            .modifier(PlaceholderStyle(showPlaceHolder: userPw.isEmpty, placeholder: "비밀번호", color: Color.gray))
                             .padding(.horizontal, 10)
                     }
                 }.padding()
@@ -178,7 +178,7 @@ struct signUps: View {
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
                         .foregroundColor(.white)
-                        .modifier(PlaceholderStyle(showPlaceHolder: userId.isEmpty, placeholder: "아이디"))
+                        .modifier(PlaceholderStyle(showPlaceHolder: userId.isEmpty, placeholder: "아이디", color: Color.gray))
                         .padding(.horizontal, 10)
                 }
                 ZStack{
@@ -190,7 +190,7 @@ struct signUps: View {
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
                         .foregroundColor(.white)
-                        .modifier(PlaceholderStyle(showPlaceHolder: userPw.isEmpty, placeholder: "비밀번호"))
+                        .modifier(PlaceholderStyle(showPlaceHolder: userPw.isEmpty, placeholder: "비밀번호", color: Color.gray))
                         .padding(.horizontal, 10)
                 }
                 ZStack{
@@ -202,7 +202,7 @@ struct signUps: View {
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
                         .foregroundColor(.white)
-                        .modifier(PlaceholderStyle(showPlaceHolder: name.isEmpty, placeholder: "이름"))
+                        .modifier(PlaceholderStyle(showPlaceHolder: name.isEmpty, placeholder: "이름", color: Color.gray))
                         .padding(.horizontal, 10)
                 }
             }

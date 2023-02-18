@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct detailView: View {
+    
     @Environment(\.dismiss) private var dismiss
     @AppStorage("UserId") var UserId: String = UserDefaults.standard.string(forKey: "UserId") ?? ""
     @AppStorage("userName") var userName: String = UserDefaults.standard.string(forKey: "userName") ?? ""
     
     var MId = ""
+    @State var myMovies = [Movie]()
     @State var actors = [Actors]()
     @State var comments = [Comment]()
     @State var MovieDetail : RespoMovie?
@@ -26,8 +28,39 @@ struct detailView: View {
     @State var ratingVal: Double = 5.0
     
     @StateObject var user = User()
+    @State var remove = false
+    
     init(_id: String = "631f93832d06ff4e337e64b9"){
         self.MId = _id
+    }
+    
+    
+    
+    func MyMovies() {
+        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileurl = doc.appendingPathComponent("MyMovieData", conformingTo: .json)
+        print(fileurl)
+        if FileManager.default.fileExists(atPath: fileurl.path()) {
+            guard let js = NSData(contentsOf: fileurl) else { return }
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let myData = try? decoder.decode(savingMovie.self, from: js as Data)
+            self.myMovies = myData?.data ?? []
+        }
+        let Movie = Movie(title: MovieDetail?.title ?? "영화 제목", _id: MId, image: MovieDetail?.image, genre: MovieDetail?.genre ?? ["장르"])
+        self.myMovies.append(Movie)
+        let finalData = savingMovie(message: String(describing: MovieDetail!.title), data: myMovies)
+        let data = try! JSONEncoder().encode(finalData)
+        
+        do {
+            if FileManager.default.fileExists(atPath: fileurl.path()) {
+                try FileManager.default.removeItem(at: fileurl)
+            }
+            FileManager.default.createFile(atPath: fileurl.path(), contents: data)
+        } catch {
+            print("mymovie encode-", error)
+        }
+        
     }
     
     //MARK: 영화 세부 데이터 가져옴.
@@ -46,8 +79,9 @@ struct detailView: View {
                     self.actors = response.actors
                     self.comments = response.comments
                     self.MovieDetail = response
-                    print(comments.count)
+                    //print(comments.count)
                     progress = false
+                    user.detailViewProgress = false
                 }
             }
             catch {
@@ -55,12 +89,13 @@ struct detailView: View {
             }
         }
         task.resume()
+        
     }
     
     var body: some View {
         GeometryReader { geometry in
             ZStack(){
-                if progress {
+                if progress || user.detailViewProgress {
                     ProgressView() // 로딩
                         .onAppear(){
                             getDetails()
@@ -74,15 +109,14 @@ struct detailView: View {
                                 //let Images = img.image
                                 ZStack{
                                     if MovieDetail!.title == "아바타"{ // 아바타는 죄가 많다.
-                                       
-                                        img.image?
+                                        img
                                             .resizable()
                                             .frame(width:geometry.size.width + 190, height: 300)
                                             .frame(width:geometry.size.width, height: 300)
                                             .clipped()
                                             .opacity(0.3)
                                         
-                                        img.image?
+                                        img
                                             .resizable()
                                             .scaledToFill()
                                             .frame(width: 300/1.49,height: 300)
@@ -90,12 +124,12 @@ struct detailView: View {
                                     }
                                     else {
                                         // 포스터 투명도 준다음 화면 크기에 맞게 가로로 늘림.
-                                        img.image?
+                                        img
                                             .resizable()
                                             .frame(width:geometry.size.width, height: 300)
                                             .opacity(0.3)
                                         // 원본 포스터 가져옴
-                                        img.image?
+                                        img
                                             .resizable()
                                             .scaledToFill()
                                             .frame(width: 300/1.47,height: 300)
@@ -103,6 +137,8 @@ struct detailView: View {
                                             .frame(height: 300)
                                     }
                                 }
+                            } placeholder: {
+                                Rectangle()
                             }
                             // 영화 정보
                             HStack{
@@ -132,22 +168,26 @@ struct detailView: View {
                             ScrollView(.horizontal){
                                 HStack{
                                     ForEach(actors, id: \._id) { actor in
-                                        VStack{
-                                            AsyncImage(url: URL(string: "http://mynf.codershigh.com:8080"+actor.image)) { image in
-                                                image.image?
-                                                    .resizable()
-                                                    .aspectRatio(contentMode: .fill)
-                                                    .frame(height: 100)
-                                                    .clipShape(Circle())
-                                                    .padding(.bottom, 8)
+                                        NavigationLink {
+                                            ActorView(actorId: actor._id)
+                                        } label: {
+                                            VStack{
+                                                AsyncImage(url: URL(string: "http://mynf.codershigh.com:8080"+actor.image)) { image in
+                                                    image.image?
+                                                        .resizable()
+                                                        .aspectRatio(contentMode: .fill)
+                                                        .frame(height: 100)
+                                                        .clipShape(Circle())
+                                                        .padding(.bottom, 8)
+                                                }
+                                                Text(actor.name+"\n")
+                                                    .lineLimit(2)
                                             }
-                                            Text(actor.name+"\n")
-                                                .lineLimit(2)
+                                            .frame(width: 100,height: 160)
+                                            .padding()
+                                            .background(Rectangle().cornerRadius(15).foregroundColor(.secondary).opacity(0.5))
+                                            .padding(5)
                                         }
-                                        .frame(width: 100,height: 160)
-                                        .padding()
-                                        .background(Rectangle().cornerRadius(15).foregroundColor(.secondary).opacity(0.5))
-                                        .padding(5)
                                     }
                                 }
                             }
@@ -165,13 +205,14 @@ struct detailView: View {
                                         Image(systemName: "star")
                                         Text(String(comment.rating))
                                     }
+                                    .foregroundColor(userName == comment.name ? .black : .white)
                                     .frame(height: 40)
                                     .background(
                                         Rectangle()
                                             .cornerRadius(10)
-                                            .foregroundColor(.gray)
-                                            .opacity(0.5)
-                                            .padding(.horizontal,-15)
+                                            .foregroundColor(userName == comment.name ? .white.opacity(0.6) : .gray.opacity(0.5))
+                                            .padding(.horizontal,-16)
+                                            .padding(.top,-1)
                                     )
                                     
                                     Text(comment.text)
@@ -180,9 +221,9 @@ struct detailView: View {
                                 .frame(width: geometry.size.width - 65)
                                 .padding()
                                 .padding(.top, -15)
-                                .background(Rectangle().cornerRadius(10).foregroundColor(.secondary).opacity(0.5))
+                                .background(Rectangle().cornerRadius(10).foregroundColor(userName == comment.name ? Color(red: 0.6, green: 0.6, blue: 0.6) : Color(red: 0.25, green: 0.25, blue: 0.25)))
                                 .padding(5)
-                                
+                                .Swipes(geometry: geometry,progress: $progress, itsMe: userName == comment.name ? true : false, movieId: MId, commentId: comment._id)
                             }
                             HStack{}.frame(height: 50)
                         }
@@ -192,26 +233,35 @@ struct detailView: View {
                     }
                     //MARK: 네비게이션 뷰 커스텀 Back 버튼
                     VStack{
-                        Button {
-                            dismiss()
-                        } label: {
+                        HStack{
                             Button {
                                 dismiss()
                             } label: {
-                                HStack(spacing: 0){
-                                    Image(systemName: "chevron.backward")
-                                        .foregroundColor(.white)
-                                        .padding(10)
-                                    Text("Back")
-                                        .foregroundColor(.white)
-                                    Spacer()
+                                Button {
+                                    dismiss()
+                                } label: {
+                                    HStack(spacing: 0){
+                                        Image(systemName: "chevron.backward")
+                                            .foregroundColor(.white)
+                                            .padding(10)
+                                        Text("Back")
+                                            .foregroundColor(.white)
+                                    }
+                                    //.frame(width: geometry.size.width)
+                                    .bold()
                                 }
-                                .frame(width: geometry.size.width)
-                                .bold()
+                            }
+                            Spacer()
+                            Button {
+                                MyMovies()
+                            } label: {
+                                Image(systemName: "plus")
+                                    .padding(10).tint(.white)
                             }
                         }
-                        .background(.thickMaterial)
+                        .background(.regularMaterial)
                         Spacer()
+
                         //MARK: 댓글 작성
                         HStack{
                             TextField("댓글을 입력하세요", text: $commentInput)
@@ -229,7 +279,6 @@ struct detailView: View {
                                 if !UserId.isEmpty {
                                     if !self.commentInput.isEmpty {
                                     user.commentWrite(id: MId, rating: Float(ratingVal), text: commentInput)
-                                        comments.append(Comment(_id: MId, userId: UserId, name: userName, text: commentInput, rating: Float(ratingVal)))
                                         commentInput = ""
                                     } else {
                                         self.commentsisEmpty = true
@@ -298,63 +347,6 @@ struct detailView: View {
             }.toolbar(.hidden)
         }
     }
-}
-//MARK: 영화 아이디로 받아온 데이터 디코딩
-struct RespoMovie: Decodable {
-    let _id: String
-    let title: String
-    let year: Int?
-    let image: String?
-    let genre: [String]
-    let actors: [Actors]
-    let comments: [Comment]
-    
-    enum CodingKeys :String, CodingKey {
-        case _id
-        case title
-        case year
-        case image
-        case genre
-        case actors
-        case comments
-        
-        case data
-    }
-    
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        let dataContainer = try container.nestedContainer(keyedBy: CodingKeys.self, forKey: .data)
-        print("ds")
-        self._id = try dataContainer.decode(String.self, forKey: ._id)
-        print("ds")
-        self.title = try dataContainer.decode(String.self, forKey: .title)
-        print("ds")
-        self.year = try dataContainer.decode(Int.self, forKey: .year)
-        print("ds")
-        self.image = try? dataContainer.decode(String.self, forKey: .image)
-        print("ds")
-        self.genre = try dataContainer.decode([String].self, forKey: .genre)
-        print("q")
-        self.actors = try dataContainer.decode([Actors].self, forKey: .actors)
-        print("e")
-        self.comments = try dataContainer.decode([Comment].self, forKey: .comments)
-        print("no")
-    }
-}
-
-struct Actors: Codable {
-    let _id: String
-    let name: String
-    let image: String
-}
-
-struct Comment: Codable {
-    let _id: String
-    let userId: String
-    let name: String
-    let text: String
-    let rating: Float
 }
 
 struct detailView_Previews: PreviewProvider {
