@@ -13,6 +13,7 @@
 		031A8ED129912B30009B6B31 /* PlaceholderStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031A8ED029912B30009B6B31 /* PlaceholderStyle.swift */; };
 		031A8ED329912B3D009B6B31 /* PlaceholderStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031A8ED229912B3D009B6B31 /* PlaceholderStyle.swift */; };
 		031A8ED929914F88009B6B31 /* detailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 031A8ED829914F87009B6B31 /* detailView.swift */; };
+		0330681029A384CB00A49D5D /* SelectedToRemove.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0330680F29A384CB00A49D5D /* SelectedToRemove.swift */; };
 		033825B429A059F50067042A /* Swipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033825B329A059F50067042A /* Swipe.swift */; };
 		033825B629A09F140067042A /* MyMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033825B529A09F140067042A /* MyMovie.swift */; };
 		033F015C299112EA005B8D15 /* USG_2023_intermediate_group1App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033F015B299112EA005B8D15 /* USG_2023_intermediate_group1App.swift */; };
@@ -36,6 +37,7 @@
 		031A8ED029912B30009B6B31 /* PlaceholderStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaceholderStyle.swift; path = USG_2023_intermediate_group1/PlaceholderStyle.swift; sourceTree = SOURCE_ROOT; };
 		031A8ED229912B3D009B6B31 /* PlaceholderStyle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceholderStyle.swift; sourceTree = "<group>"; };
 		031A8ED829914F87009B6B31 /* detailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = detailView.swift; sourceTree = "<group>"; };
+		0330680F29A384CB00A49D5D /* SelectedToRemove.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedToRemove.swift; sourceTree = "<group>"; };
 		03319B9129911DD600BBFBB7 /* USG-2023-intermediate-group1-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "USG-2023-intermediate-group1-Info.plist"; sourceTree = SOURCE_ROOT; };
 		033825B329A059F50067042A /* Swipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swipe.swift; sourceTree = "<group>"; };
 		033825B529A09F140067042A /* MyMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMovie.swift; sourceTree = "<group>"; };
@@ -98,6 +100,7 @@
 				03D37E022995D75600F1FF5E /* HomeRecommandMovie.swift */,
 				031A8ED229912B3D009B6B31 /* PlaceholderStyle.swift */,
 				033825B329A059F50067042A /* Swipe.swift */,
+				0330680F29A384CB00A49D5D /* SelectedToRemove.swift */,
 				0316DDC329935D4400D020DA /* User.swift */,
 				03D37DFE299570A600F1FF5E /* MovieFunction.swift */,
 				03D1EEAB299E78D400167B76 /* ImagePicker.swift */,
@@ -198,6 +201,7 @@
 				03D1EEB2299FC9BE00167B76 /* AllDataStruct.swift in Sources */,
 				031A8ED129912B30009B6B31 /* PlaceholderStyle.swift in Sources */,
 				03D37DFF299570A600F1FF5E /* MovieFunction.swift in Sources */,
+				0330681029A384CB00A49D5D /* SelectedToRemove.swift in Sources */,
 				0316DDC429935D4400D020DA /* User.swift in Sources */,
 				03D1EEB0299FC81B00167B76 /* ActorView.swift in Sources */,
 				03D37E012995C43300F1FF5E /* GenreStack.swift in Sources */,

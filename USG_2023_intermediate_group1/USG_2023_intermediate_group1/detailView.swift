@@ -29,14 +29,15 @@ struct detailView: View {
     
     @StateObject var user = User()
     @State var remove = false
+    @State var like = false
+    
+    //MARK: 함수들
     
     init(_id: String = "631f93832d06ff4e337e64b9"){
         self.MId = _id
     }
     
-    
-    
-    func MyMovies() {
+    func isLikeAdded() {
         let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileurl = doc.appendingPathComponent("MyMovieData", conformingTo: .json)
         print(fileurl)
@@ -47,6 +48,19 @@ struct detailView: View {
             let myData = try? decoder.decode(savingMovie.self, from: js as Data)
             self.myMovies = myData?.data ?? []
         }
+        let Movie = Movie(title: MovieDetail?.title ?? "영화 제목", _id: MId, image: MovieDetail?.image, genre: MovieDetail?.genre ?? ["장르"])
+        for mov in myMovies {
+            if mov == Movie {
+                print(Movie)
+                like = true
+                break
+            }
+        }
+    }
+    
+    func MyMovies() {
+        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileurl = doc.appendingPathComponent("MyMovieData", conformingTo: .json)
         let Movie = Movie(title: MovieDetail?.title ?? "영화 제목", _id: MId, image: MovieDetail?.image, genre: MovieDetail?.genre ?? ["장르"])
         self.myMovies.append(Movie)
         let finalData = savingMovie(message: String(describing: MovieDetail!.title), data: myMovies)
@@ -60,7 +74,7 @@ struct detailView: View {
         } catch {
             print("mymovie encode-", error)
         }
-        
+        self.like = true
     }
     
     //MARK: 영화 세부 데이터 가져옴.
@@ -88,9 +102,32 @@ struct detailView: View {
                 
             }
         }
-        task.resume()
-        
+        task.resume()    }
+    
+    func dislikeMovie() {
+        for i in 0..<myMovies.count {
+            if myMovies[i]._id == MId {
+                myMovies.remove(at: i)
+                break
+            }
+        }
+        let doc = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let fileurl = doc.appendingPathComponent("MyMovieData", conformingTo: .json)
+        let finalData = savingMovie(message: String(describing: MovieDetail!.title), data: myMovies)
+        let data = try! JSONEncoder().encode(finalData)
+        do {
+            if FileManager.default.fileExists(atPath: fileurl.path()) {
+                try FileManager.default.removeItem(at: fileurl)
+            }
+            FileManager.default.createFile(atPath: fileurl.path(), contents: data)
+        } catch {
+            print("mymovie encode-", error)
+        }
+        self.like = false
     }
+   
+    
+    //MARK: 뷰
     
     var body: some View {
         GeometryReader { geometry in
@@ -253,10 +290,16 @@ struct detailView: View {
                             }
                             Spacer()
                             Button {
-                                MyMovies()
+                                if !like {
+                                    MyMovies()
+                                } else {
+                                   dislikeMovie()
+                                }
                             } label: {
-                                Image(systemName: "plus")
+                                Image(systemName: like ? "heart.circle" : "plus")
                                     .padding(10).tint(.white)
+                            }.onAppear(){
+                                isLikeAdded()
                             }
                         }
                         .background(.regularMaterial)
