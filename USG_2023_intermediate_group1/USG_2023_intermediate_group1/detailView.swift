@@ -297,7 +297,10 @@ struct detailView: View {
                                 }
                             } label: {
                                 Image(systemName: like ? "heart.circle" : "plus")
-                                    .padding(10).tint(.white)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(height: 25)
+                                    .padding(.horizontal,10).tint(.white)
                             }.onAppear(){
                                 isLikeAdded()
                             }
